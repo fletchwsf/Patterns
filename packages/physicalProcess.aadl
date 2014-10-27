@@ -1,0 +1,20 @@
+package physicalProcess
+public
+	
+with sensor;
+
+process physicalModel
+end physicalModel;
+
+process implementation physicalModel.impl
+--	subcomponents
+--		sensorData : abstract sensor::sensor;
+--		sensorData : thread read_sensor.data;
+	properties
+		Source_Language => (C);
+		Source_Text => ("sensor.cc", "sensor.obj");
+		applies to read_sensor.data;
+		
+end physicalModel.impl;
+
+end physicalProcess;

@@ -1,0 +1,14 @@
+package ErrorModelLibrary
+public
+	
+with EMV2;
+
+annex EMV2{** 
+	error behavior Simple
+		use types ErrorLibrary;
+		states
+			Operative : initial state;
+			Failed : state ;
+	end behavior;
+**};
+end ErrorModelLibrary;

@@ -1,0 +1,51 @@
+package sensor
+public
+	
+with EMV2;
+with ARP4761;
+
+abstract sensor
+	features
+		sensorReading : out data port;
+	flows
+		f1: flow source sensorReading {
+			Latency => 1 ms .. 3 ms;
+		};
+	annex EMV2{**
+		use types ErrorLibrary;
+		use behavior ErrorModelLibrary::Simple;
+		error propagations
+				sensorReading: out propagation {ServiceOmission, ValueError, ItemOmission};
+			flows
+				ef1: error source sensorReading {ServiceOmission} when failed;
+				ef2: error source sensorReading {ValueError} when failed;
+				ef3: error source sensorReading {ItemOmission} when failed;
+		end propagations;
+		
+--		
+--		component error behavior
+--			events
+--				cpuMad : error event {err_data};
+--				cpuFault : error event {no_data};
+--			transitions
+--				cpuFailed : operative -[powerIn{noPower} or cpuFault{no_data} ]-> failed;
+--				cpuErroneous : operative -[powerIn{noerror} and cpuMad{err_data}]-> erroneous;
+--		end component;
+
+		properties
+			EMV2::occurrencedistribution => [ probabilityvalue => 0.1 ; Distribution => Fixed;] applies to failed;
+			EMV2::severity => ARP4761::Minor applies to failed;
+			ARP4761::hazards => 
+			([
+				crossreference => "Report reference";
+				description => "Sensor reading failure description";
+				environment => "All";
+				failure => "Sensor failure description";
+				failureEffect => "Effect of sensor failure";
+				phases => ("Operation phases");
+				comment => "The impact on the sensor failure and comments here";
+			]) applies to failed;
+	**};
+end sensor;
+
+end sensor;
